@@ -1,0 +1,29 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block title %}Modifier Utilisateur{% endblock %}
+
+{% block body %}
+<h2>Modifier Utilisateur</h2>
+
+<form method="post">
+    <label>Nom :</label>
+    <input type="text" name="nom" value="{{ user.nom }}" required><br>
+
+    <label>Prénom :</label>
+    <input type="text" name="prenom" value="{{ user.prenom }}" required><br>
+
+    <label>Email :</label>
+    <input type="email" name="email" value="{{ user.email }}" required><br>
+
+    <label>Rôle :</label>
+    <select name="role">
+        <option value="ROLE_ETUDIANT" {% if 'ROLE_ETUDIANT' in user.roles %}selected{% endif %}>Étudiant</option>
+        <option value="ROLE_ENSEIGNANT" {% if 'ROLE_ENSEIGNANT' in user.roles %}selected{% endif %}>Enseignant</option>
+        <option value="ROLE_PSYCHOLOGUE" {% if 'ROLE_PSYCHOLOGUE' in user.roles %}selected{% endif %}>Psychologue</option>
+    </select><br>
+
+    <button type="submit">Modifier</button>
+</form>
+
+<a href="{{ path('admin_dashboard') }}">Retour</a>
+{% endblock %}

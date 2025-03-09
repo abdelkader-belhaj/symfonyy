@@ -1,0 +1,261 @@
+{% extends 'base1.html.twig' %}
+
+
+{% block title %}{% endblock %}
+
+{% block body %}
+<!-- About Start -->
+ <div class="container-fluid py-5 about bg-light">
+    <div class="container py-5">
+        <div class="row g-5 align-items-center">
+            <div class="col-lg-5 wow fadeIn" data-wow-delay="0.1s">
+              
+
+
+
+
+<!-- img -->
+{% if images is not empty %}
+  <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-indicators">
+      {% for image in images %}
+        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="{{ loop.index0 }}"
+                class="{{ loop.first ? 'active' : '' }}"
+                aria-label="Slide {{ loop.index }}"
+                {% if loop.first %}aria-current="true"{% endif %}></button>
+      {% endfor %}
+    </div>
+    <div class="carousel-inner">
+      {% for image in images %}
+        <div class="carousel-item {{ loop.first ? 'active' : '' }}">
+          <img src="{{ asset('uploads/' ~ image) }}" class="d-block w-100" alt="{{ activity.titre }} - Slide {{ loop.index }}" style="width: 300px; height: 600px; object-fit: cover;">
+        </div>
+      {% endfor %}
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+  </div>
+{% else %}
+  <p>Pas d'image disponible</p>
+{% endif %}
+<!--EndImag-->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            </div>
+            <div class="col-lg-7 wow fadeIn" data-wow-delay="0.3s">
+                <h4 class="text-primary mb-4 border-bottom border-primary border-2 d-inline-block p-2 title-border-radius">
+                   {{ activity.titre }}
+                </h4>
+                <h1 class="text-dark mb-4 display-5">
+                    
+                    <p><strong>Date :</strong> {{ activity.date ? activity.date|date('d M Y H:i') : 'Non spécifiée' }}</p>
+                </h1>
+                <p class="text-dark mb-4">
+                    {{ activity.description }}
+                </p>
+                <div class="row mb-4">
+                    <div class="col-lg-6">
+                        <h6 class="mb-3"><i class="fas fa-check-circle me-2"></i>Sport Activities</h6>
+                        <h6 class="mb-3"><i class="fas fa-check-circle me-2 text-primary"></i>Outdoor Games</h6>
+                        <h6 class="mb-3"><i class="fas fa-check-circle me-2 text-secondary"></i>Nutritious Foods</h6>
+                    </div>
+                    <div class="col-lg-6">
+                        <h6 class="mb-3"><i class="fas fa-check-circle me-2"></i>Highly Secured</h6>
+                        <h6 class="mb-3"><i class="fas fa-check-circle me-2 text-primary"></i>Friendly Environment</h6>
+                        <h6><i class="fas fa-check-circle me-2 text-secondary"></i>Qualified Teacher</h6>
+                    </div>
+                </div>
+              <!--  <a href="" class="btn btn-primary px-5 py-3 btn-border-radius">participer</a>-->
+                <a href="{{ path('app_activity_index') }}" class="btn btn-primary px-5 py-3 btn-border-radius">Retour</a>
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+
+    <section><!-- feedback -->
+    <div class="section-title">
+        <!-- Vous pouvez ajouter un titre ici -->
+    </div>
+
+    <div class="container-fluid footer py-5 wow fadeIn" data-wow-delay="0.1s">
+        <div class="container py-5">
+            <div class="row g-5">
+                <div class="col-md-50% col-lg-50% col-xl-50%">
+                    <div class="container" style="width: 720px; margin-bottom: 120px;">
+                        <div class="row justify-content-center">
+                            <div class="col-md-10">
+                                <div class="card" style="background-color: transparent;">
+                                    <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
+                                        <!-- Zone des commentaires -->
+                                        <div style="background-color: transparent; padding: 10px; overflow-y: auto; max-height: 200px; width: 450px;">
+                                            {% for commentaire in commentaires %}
+                                            
+                                                <div style="margin-bottom: 10px;">
+                                                    <p style="background-color: rgba(240, 255, 255, 0.5); padding: 10px; border-radius: 5px;">
+                                                        {{ commentaire.contenu }}
+                                                   
+                                             
+                                                    <!-- Bouton pour générer l'audio du commentaire -->
+                               {% set audioPath = 'uploads/comment_' ~ commentaire.id ~ '.mp3' %}
+
+<!-- Lecteur audio caché et sans l'attribut controls -->
+<audio id="audio-{{ commentaire.id }}" style="display: none;">
+    <source src="{{ asset(audioPath) }}" type="audio/mpeg">
+    Votre navigateur ne supporte pas la lecture audio.
+</audio>
+
+<!-- Icône cliquable pour déclencher la lecture -->
+<i class="fa-solid fa-volume-high float-end"
+   style="color: #511f51; cursor: pointer;"
+   onclick="playAudio({{ commentaire.id }})">
+</i>
+ </p>
+
+
+ 
+<script>
+function playAudio(commentId) {
+    var audioElement = document.getElementById('audio-' + commentId);
+    if (audioElement) {
+        audioElement.play();
+    }
+}
+</script>
+
+
+
+
+                                                </div>
+                                            {% else %}
+                                                <p>Aucun commentaire pour cette activité.</p>
+                                            {% endfor %}
+                                        </div>
+
+                                        <!-- Formulaire d'ajout de commentaire -->
+                                        {{ form_start(form) }}
+
+                                        <div class="commentaire-input d-flex flex-column align-items-center w-100">
+                                            {{ form_row(form.contenu, {'label': false}) }}
+                                        </div>
+
+                                        <br>
+
+                                        <!-- Note avec étoiles -->
+                                        <div class="d-flex justify-content-center align-items-center">
+                                            <h1>
+                                                {% for i in 1..5 %}
+                                                    <i class="fa-sharp fa-regular fa-star fa-flip-horizontal" data-value="{{ i }}"></i>
+                                                {% endfor %}
+                                            </h1>
+                                        </div>
+
+                                        <!-- Note numérique masquée (sans le label) -->
+                                        <div class="d-none">
+                                            {{ form_widget(form.note) }}
+                                        </div>
+
+                                        <div class="text-center">
+                                            {{ form_row(form.submit, {'attr': {'class': 'btn btn-primary px-5 py-3 btn-border-radius'}}) }}
+                                        </div>
+
+                                        {{ form_end(form) }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+     </div>
+</section>
+
+
+<!-- About End -->
+
+
+
+<script>
+    window.onload = () => {
+        const stars = document.querySelectorAll(".fa-sharp.fa-regular.fa-star.fa-flip-horizontal");
+        const note = document.querySelector("#{{ form.note.vars.id }}");
+
+        for(star of stars){
+            star.addEventListener("mouseover", function(){
+                resetStars();
+                this.style.color = "#FFD43B";
+                this.classList.add("las");
+                this.classList.remove("lar");
+                let previousStar = this.previousElementSibling;
+
+                while(previousStar){
+                    previousStar.style.color = "#FFD43B";
+                    previousStar.classList.add("las");
+                    previousStar.classList.remove("lar");
+                    previousStar = previousStar.previousElementSibling;
+                }
+            });
+
+            star.addEventListener("click", function(){
+                note.value = this.dataset.value;
+            });
+
+            star.addEventListener("mouseout", function(){
+                resetStars(note.value);
+            });
+        }
+
+        function resetStars(note = 0){
+            for(star of stars){
+                if(star.dataset.value > note){
+                    star.style.color = "black";
+                    star.classList.add("lar");
+                    star.classList.remove("las");
+                }else{
+                    star.style.color = "#FFD43B";
+                    star.classList.add("las");
+                    star.classList.remove("lar");
+                }
+            }
+        }     
+    }
+</script>
+
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="..." crossorigin="anonymous">
+
+<link rel="stylesheet" href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
+
+        <script src="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/js/line-awesome.min.js"></script>
+
+        <link href="https://fonts.googleapis.com/css?family=Poppins:300,300i,400,400i,600,600i,700,700i|Satisfy|Comic+Neue:300,300i,400,400i,700,700i" rel="stylesheet">
+
+
+
+
+
+
+
+{% endblock %}
+
+

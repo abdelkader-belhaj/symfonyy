@@ -1,0 +1,103 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Activity index{% endblock %}
+
+{% block body %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="..." crossorigin="anonymous">
+
+<style>
+    .text-container {
+        white-space: normal;      /* Permet au texte de se répartir sur plusieurs lignes */
+        word-wrap: break-word;    /* Permet de couper le texte sur plusieurs lignes si nécessaire */
+        overflow: hidden;         /* Cache tout texte qui dépasse de la zone */
+        text-overflow: ellipsis;  /* Ajoute des "..." si le texte dépasse la limite de la boîte */
+        height: 100px;            /* Limite la hauteur de la description */
+        line-height: 1.5;         /* Améliore la lisibilité du texte */
+        display: -webkit-box;
+        -webkit-line-clamp: 5;    /* Limite le texte à 5 lignes */
+        -webkit-box-orient: vertical;
+    }
+</style>
+
+<div class="container-fluid events py-5 bg-light">
+  <div class="container py-5">
+    <div class="mx-auto text-center wow fadeIn" data-wow-delay="0.1s" style="max-width: 700px;">
+      <h4 class="text-primary mb-4 border-bottom border-primary border-2 d-inline-block p-2 title-border-radius">Nos Activités</h4>
+      <h1 class="mb-5 display-3">Un Monde Sans Mots : Activités Éducatives et Ludiques</h1>
+    </div>
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 justify-content-center">
+      {% for activity in activities %}
+        <div class="col wow fadeIn {% if loop.index > 3 %}extra-activity d-none{% endif %}" data-wow-delay="0.5s">
+          <div class="events-item bg-primary rounded">
+            <div class="events-inner position-relative">
+              <div class="events-img overflow-hidden rounded-circle position-relative">
+{% if activity.imageFileName is not empty %}
+    {# Supprimez les crochets et les guillemets pour obtenir "img1.jpg,img2.jpg" #}
+    {% set trimmed = activity.imageFileName|replace({'[': '', ']': '', '"': ''}) %}
+    {# Découpez la chaîne par la virgule pour obtenir un tableau #}
+    {% set imageList = trimmed|split(',') %}
+    <img src="{{ asset('uploads/' ~ imageList[0]) }}" class="img-fluid rounded-circle" alt="Image" style="width: 400px; height: 360px; object-fit: cover;">
+{% else %}
+    <p>Pas d'image disponible</p>
+{% endif %}
+                <div class="event-overlay">
+                  <a href="{{ asset('uploads/' ~ activity.imageFileName) }}" data-lightbox="event-1">
+                    <i class="fas fa-search-plus text-white fa-2x"></i>
+                  </a>
+                </div>
+              </div>
+              <div class="px-4 py-2 bg-secondary text-white text-center events-rate">
+                {{ activity.date ? activity.date|date('d M') : '' }}
+              </div>
+              <div class="d-flex justify-content-between px-4 py-2 bg-secondary">
+                <small class="text-white"><i class="fas fa-calendar me-1 text-primary"></i> {{ activity.date ? activity.date|date('H:i') : '' }}</small>
+                <small class="text-white"><i class="fas fa-map-marker-alt me-1 text-primary"></i>localisation</small>
+              </div>
+            </div>
+            <div class="events-text p-4 border border-primary bg-white border-top-0 rounded-bottom">
+              <a href="{{ path('app_activity_details', {'id': activity.id}) }}" class="h4">{{ activity.titre }}</a>
+              <p class="mb-0 mt-3 text-container">{{ activity.description }}</p>
+            </div>
+
+            {% if averageNotes[activity.id] is defined %}
+              <div class="stars d-flex justify-content-center align-items-center">
+                <h1>
+                  {% set average = averageNotes[activity.id] %}
+                  {% for i in 1..5 %}
+                    {% if i <= average %}
+                      <i class="fa-solid fa-star fa-beat" style="color: #FFD700;" data-value="{{ i }}"></i>
+                    {% else %}
+                      <i class="fa-solid fa-star" style="color: #ccc;" data-value="{{ i }}"></i>
+                    {% endif %}
+                  {% endfor %}
+                </h1>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      {% else %}
+        <div class="col-12">
+          <p>No activities found.</p>
+        </div>
+      {% endfor %}
+    </div>
+    {% if activities|length > 3 %}
+      <div class="text-center mt-4">
+        <button id="showAllBtn" class="btn btn-primary">Show All</button>
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+<script>
+  document.getElementById('showAllBtn')?.addEventListener('click', function(){
+    var extras = document.querySelectorAll('.extra-activity');
+    extras.forEach(function(el){
+      el.classList.toggle('d-none');
+    });
+    // Change le texte du bouton en fonction de l'état
+    this.innerText = (this.innerText === 'Show All') ? 'Show Less' : 'Show All';
+  });
+</script>
+
+{% endblock %}

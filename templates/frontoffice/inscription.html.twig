@@ -1,0 +1,76 @@
+{% block body %}
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #eaeaea;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .admin-login-container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
+        }
+        h2 {
+            color: #2a9d8f;
+        }
+        p {
+            margin: 10px 0;
+        }
+        input, select, button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #2a9d8f;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #21867a;
+        }
+        a {
+            color: #2a9d8f;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+
+    <div class="register-container">
+        <h2>Inscription</h2>
+
+        <form method="post">
+            <label>Nom :</label>
+            <input type="text" name="nom" required><br>
+        
+            <label>Prénom :</label>
+            <input type="text" name="prenom" required><br>
+        
+            <label>Email :</label>
+            <input type="email" name="email" required><br>
+        
+            <label>Mot de passe :</label>
+            <input type="password" name="password" required><br>
+        
+            <label>Rôle :</label>
+            <select name="role" required>
+                <option value="ROLE_ETUDIANT">Étudiant</option>
+                <option value="ROLE_ENSEIGNANT">Enseignant</option>
+                <option value="ROLE_PSYCHOLOGUE">Psychologue</option>
+            </select><br>
+        
+            <button type="submit">S'inscrire</button>
+        </form>
+    </div>
+{% endblock %}

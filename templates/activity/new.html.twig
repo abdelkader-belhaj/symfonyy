@@ -1,0 +1,51 @@
+{% extends 'base1.html.twig' %}
+
+{% block body %}
+    <div class="container-fluid py-5">
+        <div class="container py-5">
+            <div class="p-5 bg-light rounded shadow-sm">
+                <div class="mx-auto text-center wow fadeIn" data-wow-delay="0.1s" style="max-width: 700px;">
+                    <h4 class="text-primary mb-4 border-bottom border-primary border-2 d-inline-block p-2 title-border-radius">
+                        Créer une nouvelle activité
+                    </h4>
+{{ form_start(form, {'attr': {'autocomplete': 'off'}}) }}
+                    <div class="row g-4">
+                        <div class="col-lg-6">
+                            {{ form_row(form.titre, {'attr': {'class': 'form-control py-3'}}) }}
+                        </div>
+                        <div class="col-lg-6">
+                            {{ form_row(form.date, {'attr': {'class': 'form-control py-3'}}) }}
+                        </div>
+                       
+                    </div>
+                    <div class="mb-4">
+                        {{ form_row(form.description, {'attr': {'class': 'form-control py-3'}}) }}
+                    </div>
+                    
+                    <div class="mb-4">
+                        {{ form_row(form.imageFileName, {'attr': {'class': 'form-control py-3'}}) }}
+                    </div>
+                      <div class="mb-4">
+                            {{ form_row(form.typesActivity, {'attr': {'class': 'form-control py-3'}}) }}
+                        </div>
+                    
+                    <button type="submit" class="w-100 btn btn-primary py-3 mt-3 border-0 shadow-lg rounded-pill">Ajouter l'activité</button>
+                    {{ form_end(form) }}
+                    <a href="{{ path('app_activity_index') }}" class="btn btn-outline-secondary mt-3">Retour à la liste</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+ 
+
+
+
+
+
+
+
+                    
+{% endblock %}
+
+

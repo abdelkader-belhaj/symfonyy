@@ -1,0 +1,42 @@
+services:
+  db:
+    image: mariadb:10.5
+    environment:
+      MARIADB_ROOT_PASSWORD: ""   # Assurez-vous que ce soit une chaîne vide ou un mot de passe
+      MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: "yes"
+      MARIADB_DATABASE: "eduskool"
+    ports:
+      - "3307:3306"  # Le container écoute sur le port 3306, accessible via le port 3307 sur l'hôte
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - my_network
+
+  app:
+    image: php:7.4-apache
+    environment:
+      DATABASE_URL: "${DATABASE_URL}"
+    depends_on:
+      - db
+    ports:
+      - "80:80"
+    networks:
+      - my_network
+
+  mailer:
+    image: axllent/mailpit
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+    environment:
+      MP_SMTP_AUTH_ACCEPT_ANY: 1
+      MP_SMTP_AUTH_ALLOW_INSECURE: 1
+    networks:
+      - my_network
+
+volumes:
+  db_data:
+
+networks:
+  my_network:
+    driver: bridge
